@@ -1,0 +1,3 @@
+from languages_plus.utils import associate_countries_and_languages
+
+associate_countries_and_languages()

@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'TestDrive.apps.TestdriveConfig',
+    'countries_plus',
+    'languages_plus',
 ]
 
 MIDDLEWARE = [
@@ -113,3 +115,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Countries Plus settings
+COUNTRIES_PLUS_COUNTRY_HEADER = 'GEOIP_HEADER'
+COUNTRIES_PLUS_DEFAULT_ISO = 'RU'
