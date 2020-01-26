@@ -1,35 +1,42 @@
 from django.db import models
 from django.utils import timezone
+from languages_plus.models import Language
 # Create your models here.
 
-
-class Language(models.Model):
+'''
+class MyLanguage(models.Model):
     alpha_3 = models.CharField(verbose_name='Short language name', max_length=3, unique=True, null=True)  # , blank=True, null=True
     name = models.CharField(verbose_name='Language name', max_length=30, blank=True)  # , default='English'
     country = models.CharField(max_length=30, blank=True)
 
     def __str__(self):
-        return self.alpha_3 + ' (' + self.name + ')'
+        return f'{self.alpha_3} ({self.name})'
+'''
+
+
+class User(models.Model):
+    pass
+
+
+class SCType(models.Model):
+    name = models.CharField(verbose_name='SpeedCam code name', max_length=100, unique=True)
+    number = models.PositiveSmallIntegerField(verbose_name='SpeedCam type number', unique=True)
+    description = models.TextField(verbose_name='SpeedCam description', max_length=200, blank=True)
+    # message = models.ForeignKey(to=Message, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return f'Type: {str(self.number)}; {self.description}'
 
 
 class Message(models.Model):
-    language = models.ForeignKey(to=Language, on_delete=models.CASCADE)
-    voice_message_text = models.CharField(max_length=200)
+    sc_type = models.ForeignKey(to=SCType, on_delete=models.CASCADE, null=True)
+    language = models.ForeignKey(to=Language, on_delete=models.CASCADE, null=True)
+    message = models.CharField(verbose_name='Voice message text', max_length=200, blank=True)
     audio_file_name = models.CharField(max_length=30, blank=True)
     image_file_name = models.CharField(max_length=30, blank=True)
 
     def __str__(self):
-        return self.voice_message_text
-
-
-class Type(models.Model):
-    name = models.CharField(verbose_name='SpeedCam code name', max_length=100, unique=True)
-    number = models.PositiveSmallIntegerField(verbose_name='SpeedCam type number', unique=True)
-    description = models.TextField(verbose_name='SpeedCam description', max_length=200, blank=True)
-    message = models.ForeignKey(to=Message, on_delete=models.CASCADE, blank=True)
-
-    def __str__(self):
-        return 'Type: ' + str(self.number) + '; ' + self.description
+        return self.message
 
 
 class Method(models.Model):
@@ -42,7 +49,7 @@ class Method(models.Model):
 class SCPoint(models.Model):
     lon = models.DecimalField(verbose_name='Longitude (X)', max_digits=11, decimal_places=8)  # , default=0
     lat = models.DecimalField(verbose_name='Latitude (Y)', max_digits=11, decimal_places=8)
-    type = models.ForeignKey(verbose_name='SpeedCam Type', to=Type, on_delete=models.CASCADE)
+    type = models.ForeignKey(verbose_name='SpeedCam Type', to=SCType, on_delete=models.CASCADE)
     speed = models.PositiveSmallIntegerField(verbose_name='Speed limit', default=0)
     dirtype = models.PositiveSmallIntegerField(default=1)
     direction = models.SmallIntegerField(verbose_name='Direction from which SC catches', default=0)
@@ -54,4 +61,4 @@ class SCPoint(models.Model):
     available = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'ID: ' + str(self.id) + '; Type: ' + str(self.type.number) + '; ' + self.type.description
+        return f'ID: {str(self.id)}; Type: {str(self.type.number)}; self.type.description'
