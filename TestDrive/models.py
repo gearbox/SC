@@ -5,7 +5,7 @@ from languages_plus.models import Language
 
 '''
 class MyLanguage(models.Model):
-    alpha_3 = models.CharField(verbose_name='Short language name', max_length=3, unique=True, null=True)  # , blank=True, null=True
+    alpha_3 = models.CharField(verbose_name='Short language name', max_length=3, unique=True, null=True)
     name = models.CharField(verbose_name='Language name', max_length=30, blank=True)  # , default='English'
     country = models.CharField(max_length=30, blank=True)
 

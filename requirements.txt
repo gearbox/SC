@@ -1,1 +1,2 @@
+django-languages-plus
 django
