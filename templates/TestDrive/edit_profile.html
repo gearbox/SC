@@ -1,0 +1,72 @@
+{#{% load staticfiles %}#}
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+
+    <label>First Name</label>
+    {{ profile_form.first_name }}
+    {% if profile_form.first_name.errors %}
+        {% for error in profile_form.first_name.errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+    <label>Last Name</label>
+    {{ profile_form.last_name }}
+    {% if profile_form.last_name.errors %}
+        {% for error in profile_form.last_name.errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+    {{ sctype_formset.management_form }}
+
+    {% for sctype_form in sctype_formset %}
+        <div class="sctype-formset">
+            {{ sctype_form.name }}
+            {% if sctype_form.name.errors %}
+                {% for error in sctype_form.name.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            {% endif %}
+
+            {{ sctype_form.number }}
+            {% if sctype_form.number.errors %}
+                {% for error in sctype_form.number.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            {% endif %}
+
+            {{ sctype_form.description }}
+            {% if sctype_form.description.errors %}
+                {% for error in sctype_form.description.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    {% if sctype_formset.non_form_errors %}
+        {% for error in sctype_formset.non_form_errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+    <input type="submit" value="Update Profile" class="button"/>
+</form>
+
+<!-- Include formset plugin - including jQuery dependency -->
+{#<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>#}
+{#<script src="{% static 'path_to/jquery.formset.js' %}"></script>#}
+<script>
+    $('.sctype-formset').formset({
+        addText: 'add type',
+        deleteText: 'remove'
+    });
+</script>

@@ -3,9 +3,27 @@ from django import forms
 from django.forms.formsets import BaseFormSet
 
 
+class ProfileForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(ProfileForm, self).__init__(*args, **kwargs)
+
+        self.fields['first_name'] = forms.CharField(
+            max_length=30,
+            initial=self.user.first_name,
+            widget=forms.TextInput(attrs={
+                'placeholder': 'First Name',
+            }))
+        self.fields['last_name'] = forms.CharField(
+            max_length=30,
+            initial=self.user.last_name,
+            widget=forms.TextInput(attrs={
+                'placeholder': 'Last Name',
+            }))
+
+
 class MessageForm(forms.Form):
-    # sc_type = models.ForeignKey(to=Type, on_delete=models.CASCADE, null=True)
-    # language = forms.ModelChoiceField(queryset=TypeForm)
+    # language = forms.ModelChoiceField(queryset=SCTypeForm)
     language = forms.CharField()
     message = forms.CharField(
         max_length=200,
@@ -24,28 +42,10 @@ class MessageForm(forms.Form):
     #     fields = ['language', 'message', 'audio_file_name', 'image_file_name']
 
 
-class TypeForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        self.sc_type = kwargs.pop('sc_type', None)
-        super(TypeForm, self).__init__(*args, **kwargs)
-
-        self.fields['name'] = forms.CharField(
-            max_length=30,
-            initial=self.sc_type.name,
-            widget=forms.TextInput(attrs={
-                'placeholder': 'SpeedCam code name',
-            }))
-        self.fields['number'] = forms.IntegerField(
-            initial=self.sc_type.number,
-            widget=forms.TextInput(attrs={
-                'placeholder': 'Number',
-            }))
-        self.fields['description'] = forms.CharField(
-            max_length=30,
-            initial=self.sc_type.description,
-            widget=forms.TextInput(attrs={
-                'placeholder': 'SpeedCam description',
-            }))
+class SCTypeForm(forms.Form):
+    name = forms.CharField()
+    number = forms.IntegerField()
+    description = forms.CharField()
 
 
 class BaseMessageFormset(BaseFormSet):
