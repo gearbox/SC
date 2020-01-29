@@ -3,13 +3,11 @@ from django.http import HttpResponse
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-# from django.core.urlresolvers import reverse
 from django.urls import reverse
 from django.db import IntegrityError, transaction
 from django.forms.formsets import formset_factory
-from TestDrive.forms import ProfileForm, SCTypeForm, BaseMessageFormset  # , MessageForm
+from TestDrive.forms import ProfileForm, SCTypeForm  # , MessageForm, BaseMessageFormset
 from TestDrive.models import SCType  # , Message
-
 
 # Create your views here.
 
@@ -22,7 +20,8 @@ def test_profile_settings(request):
     user = request.user
 
     # Create the formset, specifying the form and formset we want to use.
-    sc_type_form_set = formset_factory(SCTypeForm, formset=BaseMessageFormset)
+    # sc_type_form_set = formset_factory(SCTypeForm, formset=BaseMessageFormset)
+    sc_type_form_set = formset_factory(SCTypeForm)
 
     # Get our existing link data for this user.  This is used as initial data.
     user_sctypes = SCType.objects.filter(user=user).order_by('number')
@@ -82,24 +81,24 @@ def test_profile_settings(request):
     Allows a user to update their own profile.
     """
     # user = request.user
-    # sc_type = SCType.number
-    sc_type = request.
+    # sctype = SCType.number
+    sctype = request.
 
     # Create the formset, specifying the form and formset we want to use.
     message_form_set = formset_factory(MessageForm, formset=BaseMessageFormset)
 
     # Get our existing data for this user.  This is used as initial data.
     # user_messages = Message.objects.filter(user=user).order_by('message')
-    type_messages = Message.objects.filter(sc_type=sc_type).order_by('sc_type')
+    type_messages = Message.objects.filter(sctype=sctype).order_by('sctype')
     messages_data = [{'message': message.message, 'language': message.language} for message in type_messages]
 
     if request.method == 'POST':
-        type_form = SCTypeForm(request.POST, sc_type=sc_type)
+        type_form = SCTypeForm(request.POST, sctype=sctype)
         message_formset = message_form_set(request.POST)
 
         if type_form.is_valid() and message_formset.is_valid():
             # Save user info
-            sc_type. = profile_form.cleaned_data.get('first_name')
+            sctype. = profile_form.cleaned_data.get('first_name')
             user.last_name = profile_form.cleaned_data.get('last_name')
             user.save()
 

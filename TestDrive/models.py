@@ -1,28 +1,31 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from languages_plus.models import Language
+
+
+# Abstract models
+class AbstractSCType(models.Model):
+    name = models.CharField(verbose_name='SpeedCam code name', max_length=100, unique=True)
+    number = models.PositiveSmallIntegerField(verbose_name='SpeedCam type number', unique=True)
+    description = models.TextField(verbose_name='SpeedCam description', max_length=200, blank=True)
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
 # Create your models here.
-
-'''
-class MyLanguage(models.Model):
-    alpha_3 = models.CharField(verbose_name='Short language name', max_length=3, unique=True, null=True)
-    name = models.CharField(verbose_name='Language name', max_length=30, blank=True)  # , default='English'
-    country = models.CharField(max_length=30, blank=True)
-
-    def __str__(self):
-        return f'{self.alpha_3} ({self.name})'
-'''
-
-
-class MyUser(models.Model):
+class User(AbstractUser):
     pass
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     # first_name = models.CharField(max_length=100, blank=True)
     # last_name = models.CharField(max_length=100, blank=True)
     company = models.CharField(max_length=100, blank=True)
@@ -32,13 +35,13 @@ class Profile(models.Model):
         return f'{self.user}, {self.company}'
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
@@ -47,7 +50,12 @@ class SCType(models.Model):
     name = models.CharField(verbose_name='SpeedCam code name', max_length=100, unique=True)
     number = models.PositiveSmallIntegerField(verbose_name='SpeedCam type number', unique=True)
     description = models.TextField(verbose_name='SpeedCam description', max_length=200, blank=True)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+    #                          blank=True, null=True,
+    #                          limit_choices_to={'is_active': True})
+    # user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
+    # user = models.ForeignKey(to=User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL.id)
     # message = models.ForeignKey(to=Message, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
@@ -55,7 +63,7 @@ class SCType(models.Model):
 
 
 class Message(models.Model):
-    sc_type = models.ForeignKey(to=SCType, on_delete=models.CASCADE, null=True)
+    sctype = models.ForeignKey(to=SCType, on_delete=models.CASCADE, null=True)
     language = models.ForeignKey(to=Language, on_delete=models.CASCADE, null=True)
     message = models.CharField(verbose_name='Voice message text', max_length=200, blank=True)
     audio_file_name = models.CharField(max_length=30, blank=True)
