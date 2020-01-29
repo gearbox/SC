@@ -2,6 +2,23 @@
 from django import forms
 from django.forms.formsets import BaseFormSet
 
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .models import User
+
+
+class CustomUserCreationForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ('username', 'email')
+
+
+class CustomUserChangeForm(UserChangeForm):
+
+    class Meta:
+        model = User
+        fields = ('username', 'email')
+
 
 class ProfileForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -9,17 +26,22 @@ class ProfileForm(forms.Form):
         super(ProfileForm, self).__init__(*args, **kwargs)
 
         self.fields['first_name'] = forms.CharField(
+            required=False,
             max_length=30,
             initial=self.user.first_name,
+            label='First Name',
             widget=forms.TextInput(attrs={
-                'placeholder': 'First Name',
-            }))
+                'placeholder': 'First Name'
+            })
+        )
         self.fields['last_name'] = forms.CharField(
+            required=False,
             max_length=30,
             initial=self.user.last_name,
             widget=forms.TextInput(attrs={
-                'placeholder': 'Last Name',
-            }))
+                'placeholder': 'Last Name'
+            })
+        )
 
 
 class MessageForm(forms.Form):
@@ -43,9 +65,25 @@ class MessageForm(forms.Form):
 
 
 class SCTypeForm(forms.Form):
-    name = forms.CharField()
-    number = forms.IntegerField()
-    description = forms.CharField()
+    name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'SpeedCam code name',
+        })
+    )
+    number = forms.IntegerField(
+        localize=False,
+        widget=forms.NumberInput(attrs={
+            'placeholder': 'SpeedCam type number',
+        })
+    )
+    description = forms.CharField(
+        required=False,
+        max_length=200,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'SpeedCam description',
+        })
+    )
 
 
 class BaseMessageFormset(BaseFormSet):

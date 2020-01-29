@@ -14,3 +14,10 @@ And then for Countries:
 It may look like this:
 
 `python manage.py loaddata countries_data.json.gz` 
+
+Generating Culture Codes (ex: pt_BR).
+You can run the below command in fjango shell:
+
+`from languages_plus.utils import associate_countries_and_languages`
+`associate_countries_and_languages()`
+

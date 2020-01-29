@@ -23,6 +23,9 @@ class AbstractSCType(models.Model):
 class User(AbstractUser):
     pass
 
+    def __str__(self):
+        return self.username
+
 
 class Profile(models.Model):
     user = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
@@ -50,19 +53,15 @@ class SCType(models.Model):
     name = models.CharField(verbose_name='SpeedCam code name', max_length=100, unique=True)
     number = models.PositiveSmallIntegerField(verbose_name='SpeedCam type number', unique=True)
     description = models.TextField(verbose_name='SpeedCam description', max_length=200, blank=True)
-    user = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-    #                          blank=True, null=True,
-    #                          limit_choices_to={'is_active': True})
-    # user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
-    # user = models.ForeignKey(to=User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL.id)
-    # message = models.ForeignKey(to=Message, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                             null=True, limit_choices_to={'is_active': True})
 
     def __str__(self):
         return f'Type: {str(self.number)}; {self.description}'
 
 
 class Message(models.Model):
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     sctype = models.ForeignKey(to=SCType, on_delete=models.CASCADE, null=True)
     language = models.ForeignKey(to=Language, on_delete=models.CASCADE, null=True)
     message = models.CharField(verbose_name='Voice message text', max_length=200, blank=True)
