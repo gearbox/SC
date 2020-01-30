@@ -1,13 +1,8 @@
 {% extends "base.html" %}
 {% load bootstrap4 %}
 {% load icons %}
-{% block custom_css %}
-    <!-- Font Awesome CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-          rel="stylesheet"
-          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-          crossorigin="anonymous">
 
+{% block custom_css %}
     <style type="text/css">
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -42,7 +37,6 @@
              -moz-box-shadow: 0 0 40px rgba(0,0,0,.3);
                   box-shadow: 0 0 40px rgba(0,0,0,.3);
         }
-
     </style>
 {% endblock %}
 
@@ -67,7 +61,7 @@
         <div class="card border-light panel-single" id="panel-login">
             {% csrf_token %}
             <div class="card-header">
-                <h2 class="h3 mb-3 font-weight-normal form-signin-heading">Log In</h2>
+                <h2 class="h3 mb-3 font-weight-normal form-signin-heading">Please Log-in</h2>
             </div>
             <div class="card-body">
                 <div id="div_id_username" class="row">
