@@ -1,2 +1,4 @@
 django-languages-plus
 django
+django-bootstrap4
+django-icons
