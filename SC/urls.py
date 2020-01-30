@@ -18,9 +18,8 @@ from django.urls import path, include
 from django.views.generic.base import TemplateView
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='TestDrive/home.html'), name='home'),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('testdrive/', include('TestDrive.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    # path('accounts/logout', include('django.contrib.auth.urls')),
 ]

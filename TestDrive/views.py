@@ -79,10 +79,6 @@ def test_profile_settings(request):
     return render(request, 'TestDrive/edit_profile.html', context)
 
 
-def index(request):
-    return HttpResponse("Hello world. This is TestDrive App index.")
-
-
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')

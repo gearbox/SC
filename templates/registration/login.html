@@ -1,5 +1,52 @@
 {% extends "base.html" %}
-{% block title %}Log In page{% endblock %}
+{% load bootstrap4 %}
+{% load icons %}
+{% block custom_css %}
+    <!-- Font Awesome CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+          crossorigin="anonymous">
+
+    <style type="text/css">
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.428571429;
+            color: #333333;
+            background-color: #ffffff;
+        }
+        #panel-login {
+            max-width: 350px;
+        }
+        #panel-login .controls{
+            padding: 0px 15px 15px !important;
+        }
+
+        #panel-login .alert-block{
+            padding: 0px;
+        }
+        #panel-login .alert-block ul{
+            margin: 10px 15px;
+            padding-left: 0px;
+        }
+        #panel-login .alert-block ul li{
+            list-style-type: none;
+        }
+        .panel-single {
+          margin: 50px auto 20px;
+          -webkit-border-radius: 5px;
+             -moz-border-radius: 5px;
+                  border-radius: 5px;
+          -webkit-box-shadow: 0 0 40px rgba(0,0,0,.3);
+             -moz-box-shadow: 0 0 40px rgba(0,0,0,.3);
+                  box-shadow: 0 0 40px rgba(0,0,0,.3);
+        }
+
+    </style>
+{% endblock %}
+
+{% block title %}Login page{% endblock %}
 
 {% block container %}
     {% if form.errors %}
@@ -15,48 +62,42 @@
         {% endif %}
     {% endif %}
 
-    <h2>Log In</h2>
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
-            </tr>
-        </table>
 
-{#        <input type="submit" value="Log in">#}
-        <button type="submit">Log in</button>
-        <input type="hidden" name="next" value="/testdrive">
-    </form>
-
-    {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-
-    <div>
-        <div>site_name</div>
-        {{ site_name }}
-    </div>
-    <div>
-        <div>site</div>
-        {{ site }}
-    </div>
-    <div>Login here:</div>
-    <div>
-        <form method="post" action="{% url 'login' %}">
+    <form method="post" action="{% url 'login' %}" id="login-form">
+        <div class="card border-light panel-single" id="panel-login">
             {% csrf_token %}
-            {{ form }}
-            <label>&nbsp;</label>
-            <input type="submit" value="Log in">
-            <input type="hidden" name="next" value="{{ next }}">
-        </form>
-    </div>
-    <div>
-        <div>next</div>
-        {{ next }}
-    </div>
+            <div class="card-header">
+                <h2 class="h3 mb-3 font-weight-normal form-signin-heading">Log In</h2>
+            </div>
+            <div class="card-body">
+                <div id="div_id_username" class="row">
+                    <div class="controls clearfix">
+                        <div class="input-group input-group-lg">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user fa-fw"></i></span></div>
+                            <label for="id_username" class="sr-only">User name</label>
+                            <input type="text" id="id_username" class="form-control" name="{{ form.username.html_name}}" placeholder="User name" required autofocus>
+                        </div>
+                    </div>
+                </div>
+                <div id="div_id_password" class="row">
+                    <div class="controls clearfix">
+                        <div class="input-group input-group-lg">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-lock fa-fw"></i></span></div>
+                            <label for="id_password" class="sr-only">Password</label>
+                            <input type="password" id="id_password" class="form-control input-lg" placeholder="Password" required name="{{ form.password.html_name}}">
+                        </div>
+                    </div>
+                </div>
+{#            {% buttons %}#}
+                <input type="hidden" name="this_is_the_login_form" value="1" />
+                <input type="hidden" name="next" value="{% url 'testdrive' %}">
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Log in</button>
+{#            {% endbuttons %}#}
+            </div>
+            {# Assumes you setup the password_reset view in your URLconf #}
+            <div class="card-footer text-muted" style="margin-top:15px;">
+                <a href="{% url 'password_reset' %}">Forgotten your password or username?</a>
+            </div>
+        </div>
+    </form>
 {% endblock %}

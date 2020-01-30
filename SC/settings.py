@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap4',
+    'django_icons',
     'TestDrive.apps.TestdriveConfig',
     'countries_plus',
     'languages_plus',
@@ -123,6 +125,35 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Settings for django-icons
+DJANGO_ICONS = {
+
+    'DEFAULTS': {
+        'renderer': 'fontawesome',
+    },
+
+    'RENDERERS': {
+        'fontawesome': 'FontAwesomeRenderer',
+        'bootstrap3': 'Bootstrap3Renderer',
+    },
+
+    'ICONS': {
+
+        'delete': 'trash',
+        'edit': {
+            'name': 'pencil',
+            'title': 'Edit',
+        },
+        'feather': {
+            'renderer': 'tests.app.renderers.CustomSvgRenderer',
+        },
+        'paperplane': {
+            'renderer': 'tests.app.renderers.CustomSvgRenderer',
+        }
+    },
+
+}
 
 # Countries Plus settings
 COUNTRIES_PLUS_COUNTRY_HEADER = 'GEOIP_HEADER'
